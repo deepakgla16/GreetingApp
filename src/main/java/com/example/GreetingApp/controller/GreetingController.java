@@ -5,6 +5,8 @@ import com.example.GreetingApp.model.GreetingModel;
 import com.example.GreetingApp.services.GreetingService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/greeting")
 public class GreetingController {
@@ -84,6 +86,10 @@ public class GreetingController {
         return  greetingService.getGreetingId(id);
     }
 
+    @GetMapping("/greeting-all")
+    public List<GreetingModel> getAllGreetings(){
+        return greetingService.getAllGreetings();
+    }
 
 
 
