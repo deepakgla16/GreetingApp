@@ -3,6 +3,7 @@ package com.example.GreetingApp.controller;
 import com.example.GreetingApp.controller.Greeting;
 import com.example.GreetingApp.model.GreetingModel;
 import com.example.GreetingApp.services.GreetingService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -91,6 +92,20 @@ public class GreetingController {
         return greetingService.getAllGreetings();
     }
 
+    @PutMapping("/greeting-update/{id}")
+    public ResponseEntity<GreetingModel> updatingGreeting(@PathVariable Long id, @RequestBody GreetingUpdateRequest request){
+        GreetingModel updatedGreeting= greetingService.updateGreeting(id,request.getMessage());
+        return ResponseEntity.ok(updatedGreeting);
+    }
 
+    public static class GreetingUpdateRequest{
+        private  String message;
+        public String getMessage() {
+            return message;
+        }
 
+        public void setMessage(String message) {
+            this.message = message;
+        }
+    }
 }
