@@ -1,6 +1,7 @@
 package com.example.GreetingApp.controller;
 
 import com.example.GreetingApp.controller.Greeting;
+import com.example.GreetingApp.model.GreetingModel;
 import com.example.GreetingApp.services.GreetingService;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,4 +47,37 @@ public class GreetingController {
         String message = greetingService.getGreetingMessageWithName(firstName, lastName);
         return new Greeting(message);
     }
+
+    @GetMapping("/greeting-save")
+    public  GreetingModel getGreetingDetails(
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName){
+        return greetingService.getGreetingMessageTosave(firstName,lastName);
+    }
+    @PostMapping("/greeting-save")
+    public GreetingModel saveGreeting(@RequestBody GreetingRequest request){
+        return greetingService.getGreetingMessageTosave(request.getFirstName(),request.getLastName());
+    }
+
+    public static class GreetingRequest{
+        private String firstName;
+        private String lastName;
+
+        public String getFirstName(){
+            return firstName;
+        }
+        public String getLastName(){
+            return lastName;
+        }
+
+        public void setFirstName(String firstName){
+            this.firstName=firstName;
+        }
+
+        public  void setLastName(String lastName){
+            this.lastName=lastName;
+        }
+    }
+
+
 }
