@@ -108,4 +108,10 @@ public class GreetingController {
             this.message = message;
         }
     }
+    @DeleteMapping("/greeting-delete/{id}")
+    public ResponseEntity<String> deleteGreeting(@PathVariable Long id){
+        greetingService.deleteGreeting(id);
+        return  ResponseEntity.ok("Deleted successfully");
+    }
+
 }
