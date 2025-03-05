@@ -79,5 +79,12 @@ public class GreetingController {
         }
     }
 
+    @GetMapping("/greeting-find/{id}")
+    public GreetingModel getGreetingById(@PathVariable Long id){
+        return  greetingService.getGreetingId(id);
+    }
+
+
+
 
 }

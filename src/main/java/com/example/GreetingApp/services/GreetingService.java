@@ -45,5 +45,10 @@ public class GreetingService {
     }
 
 
+    public GreetingModel getGreetingId(Long id){
+        return greetingRepository.findById(id).orElse(null);
+    }
+
+
 
 }
