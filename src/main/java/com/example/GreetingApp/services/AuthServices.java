@@ -1,6 +1,7 @@
 package com.example.GreetingApp.services;
 
 import com.example.GreetingApp.DTO.AuthDTO;
+import com.example.GreetingApp.DTO.LoginDTO;
 import com.example.GreetingApp.Utils.Jwt;
 import com.example.GreetingApp.model.AuthUser;
 import com.example.GreetingApp.repository.AuthRepository;
@@ -18,15 +19,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AuthServices {
 
-    @Autowired
+
     private final AuthRepository authRepository;
-    @Autowired
-    private final Jwt jwtutil;
-    @Autowired
+
     private final EmailService emailService;
-    @Autowired
     private final PasswordEncoder passwordEncoder;
 
+    private final Jwt jwtUtil;
     public String registerUser(AuthDTO authDTO) {
         if (authRepository.findByEmail(authDTO.getEmail()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists");
@@ -58,5 +57,31 @@ public class AuthServices {
         authRepository.save(user);
 
         return "Account verified";
+    }
+
+    public String loginUser(LoginDTO loginDTO){
+        Optional<AuthUser> userOptional=authRepository.findByEmail(loginDTO.getEmail());
+
+        if (userOptional.isEmpty()){
+            throw  new ResponseStatusException(HttpStatus.UNAUTHORIZED,"Email not found");
+        }
+
+        AuthUser user =userOptional.get();
+        if (!passwordEncoder.matches(loginDTO.getPassword(),user.getPassword())){
+            throw  new ResponseStatusException(HttpStatus.UNAUTHORIZED,"Invalid password");
+        }
+        if (user.getVerificationToken()!=null){
+            throw  new ResponseStatusException(HttpStatus.UNAUTHORIZED,"Verify your account");
+
+        }
+
+        String token=jwtUtil.generateToken(user.getEmail());
+
+        if (!jwtUtil.validateToken(token)) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Token validation failed");
+        }
+
+        return "Login Succsfull and token: "+token;
+
     }
 }

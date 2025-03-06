@@ -1,6 +1,7 @@
 package com.example.GreetingApp.controller;
 
 import com.example.GreetingApp.DTO.AuthDTO;
+import com.example.GreetingApp.DTO.LoginDTO;
 import com.example.GreetingApp.services.AuthServices;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,4 +41,21 @@ public class AuthController {
             return ResponseEntity.internalServerError().body("Verification failed");
         }
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO){
+    logger.info("Received login Request for email:",loginDTO.getEmail());
+
+    try {
+        String token=authServices.loginUser(loginDTO);
+        return ResponseEntity.ok("{\"message\": \"Login successful!\", \"token\": \"" + token + "\"}");
+
+    }catch (Exception e) {
+        logger.error("Error during login", e);
+        return ResponseEntity.status(401).body("Invalid email or password");
+    }
+
+
+    }
+
 }

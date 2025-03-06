@@ -1,0 +1,200 @@
+[1mdiff --git a/src/main/java/com/example/GreetingApp/DTO/AuthDTO.java b/src/main/java/com/example/GreetingApp/DTO/AuthDTO.java[m
+[1mindex dab4e3f..1beed23 100644[m
+[1m--- a/src/main/java/com/example/GreetingApp/DTO/AuthDTO.java[m
+[1m+++ b/src/main/java/com/example/GreetingApp/DTO/AuthDTO.java[m
+[36m@@ -14,16 +14,14 @@[m [mpublic class AuthDTO {[m
+     @NotBlank(message="Last name is required")[m
+     private String lastName;[m
+ [m
+[31m-    @Email (message="Invalid email format")[m
+[32m+[m[32m    @Email(message="Invalid email format")[m[41m[m
+     @NotBlank(message="Email is required")[m
+     private String email;[m
+ [m
+     @NotBlank(message="Password is required")[m
+     @Pattern([m
+[31m-            regexp="^(?=.*[A-Za-z])(?=.\\d)[A-Za-z\\d@$!%#?&]{6,}$",[m
+[31m-            message= "Password length should  be minimum 6 and contain at least one letter and one number"[m
+[32m+[m[32m            regexp="^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$!%#?&]{6,}$",[m[41m[m
+[32m+[m[32m            message="Password length should be minimum 6 and contain at least one letter and one number"[m[41m[m
+     )[m
+[31m-[m
+[31m-    private  String password;[m
+[31m-[m
+[32m+[m[32m    private String password;[m[41m[m
+ }[m
+[1mdiff --git a/src/main/java/com/example/GreetingApp/DTO/LoginDTO.java b/src/main/java/com/example/GreetingApp/DTO/LoginDTO.java[m
+[1mindex 45b5b82..3a00185 100644[m
+[1m--- a/src/main/java/com/example/GreetingApp/DTO/LoginDTO.java[m
+[1m+++ b/src/main/java/com/example/GreetingApp/DTO/LoginDTO.java[m
+[36m@@ -1,2 +1,35 @@[m
+[31m-package com.example.GreetingApp.DTO;public class LoginDTO {[m
+[31m-}[m
+[32m+[m[32mpackage com.example.GreetingApp.DTO;[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32mimport jakarta.validation.constraints.Email;[m[41m[m
+[32m+[m[32mimport jakarta.validation.constraints.NotBlank;[m[41m[m
+[32m+[m[32mimport lombok.Data;[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m@Data[m[41m[m
+[32m+[m[32mpublic class LoginDTO {[m[41m[m
+[32m+[m[32m    public LoginDTO(String email, String password) {[m[41m[m
+[32m+[m[32m        this.email = email;[m[41m[m
+[32m+[m[32m        this.password = password;[m[41m[m
+[32m+[m[32m    }[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m    public String getEmail() {[m[41m[m
+[32m+[m[32m        return email;[m[41m[m
+[32m+[m[32m    }[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m    public void setEmail(String email) {[m[41m[m
+[32m+[m[32m        this.email = email;[m[41m[m
+[32m+[m[32m    }[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m    public String getPassword() {[m[41m[m
+[32m+[m[32m        return password;[m[41m[m
+[32m+[m[32m    }[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m    public void setPassword(String password) {[m[41m[m
+[32m+[m[32m        this.password = password;[m[41m[m
+[32m+[m[32m    }[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m    @Email(message = "Invalid email format")[m[41m[m
+[32m+[m[32m    private String email;[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m    @NotBlank(message = "Password cannot be empty")[m[41m[m
+[32m+[m[32m    private String password;[m[41m[m
+[32m+[m[32m}[m
+\ No newline at end of file[m
+[1mdiff --git a/src/main/java/com/example/GreetingApp/Utils/Jwt.java b/src/main/java/com/example/GreetingApp/Utils/Jwt.java[m
+[1mindex 2d69a66..2c2fe47 100644[m
+[1m--- a/src/main/java/com/example/GreetingApp/Utils/Jwt.java[m
+[1m+++ b/src/main/java/com/example/GreetingApp/Utils/Jwt.java[m
+[36m@@ -1,6 +1,7 @@[m
+ package com.example.GreetingApp.Utils;[m
+ [m
+ import io.jsonwebtoken.Claims;[m
+[32m+[m[32mimport io.jsonwebtoken.ExpiredJwtException;[m[41m[m
+ import io.jsonwebtoken.Jwts;[m
+ import io.jsonwebtoken.SignatureAlgorithm;[m
+ import io.jsonwebtoken.security.Keys;[m
+[36m@@ -37,4 +38,6 @@[m [mpublic class Jwt {[m
+                 .getBody();[m
+         return claims.getSubject();[m
+     }[m
+[32m+[m[41m[m
+[32m+[m[41m[m
+ }[m
+[1mdiff --git a/src/main/java/com/example/GreetingApp/config/SecurityConfig.java b/src/main/java/com/example/GreetingApp/config/SecurityConfig.java[m
+[1mindex 05d926c..c5d21ad 100644[m
+[1m--- a/src/main/java/com/example/GreetingApp/config/SecurityConfig.java[m
+[1m+++ b/src/main/java/com/example/GreetingApp/config/SecurityConfig.java[m
+[36m@@ -14,7 +14,7 @@[m [mpublic class SecurityConfig {[m
+     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {[m
+         http[m
+                 .authorizeHttpRequests(auth -> auth[m
+[31m-                        .requestMatchers("/auth/register", "/auth/verify").permitAll()[m
+[32m+[m[32m                        .requestMatchers("/auth/register", "/auth/verify","/auth/login").permitAll()[m[41m[m
+                         .requestMatchers("/h2-console/**").permitAll()[m
+                         .anyRequest().authenticated()[m
+                 )[m
+[1mdiff --git a/src/main/java/com/example/GreetingApp/controller/AuthController.java b/src/main/java/com/example/GreetingApp/controller/AuthController.java[m
+[1mindex 4ad6956..43dbb77 100644[m
+[1m--- a/src/main/java/com/example/GreetingApp/controller/AuthController.java[m
+[1m+++ b/src/main/java/com/example/GreetingApp/controller/AuthController.java[m
+[36m@@ -1,6 +1,7 @@[m
+ package com.example.GreetingApp.controller;[m
+ [m
+ import com.example.GreetingApp.DTO.AuthDTO;[m
+[32m+[m[32mimport com.example.GreetingApp.DTO.LoginDTO;[m[41m[m
+ import com.example.GreetingApp.services.AuthServices;[m
+ import org.springframework.http.ResponseEntity;[m
+ import org.springframework.web.bind.annotation.*;[m
+[36m@@ -40,4 +41,10 @@[m [mpublic class AuthController {[m
+             return ResponseEntity.internalServerError().body("Verification failed");[m
+         }[m
+     }[m
+[32m+[m[41m[m
+[32m+[m[41m[m
+[32m+[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m    }[m[41m[m
+[32m+[m[41m[m
+ }[m
+[1mdiff --git a/src/main/java/com/example/GreetingApp/model/AuthUser.java b/src/main/java/com/example/GreetingApp/model/AuthUser.java[m
+[1mindex 7cfdeb1..091ba86 100644[m
+[1m--- a/src/main/java/com/example/GreetingApp/model/AuthUser.java[m
+[1m+++ b/src/main/java/com/example/GreetingApp/model/AuthUser.java[m
+[36m@@ -24,10 +24,8 @@[m [mpublic class AuthUser {[m
+     @Column(unique = true)[m
+     private String verificationToken;[m
+ [m
+[31m-    // Default constructor[m
+     public AuthUser() {}[m
+ [m
+[31m-    // Getters and Setters[m
+     public Long getId() {[m
+         return id;[m
+     }[m
+[1mdiff --git a/src/main/java/com/example/GreetingApp/services/AuthServices.java b/src/main/java/com/example/GreetingApp/services/AuthServices.java[m
+[1mindex e7d9111..5c589df 100644[m
+[1m--- a/src/main/java/com/example/GreetingApp/services/AuthServices.java[m
+[1m+++ b/src/main/java/com/example/GreetingApp/services/AuthServices.java[m
+[36m@@ -1,6 +1,7 @@[m
+ package com.example.GreetingApp.services;[m
+ [m
+ import com.example.GreetingApp.DTO.AuthDTO;[m
+[32m+[m[32mimport com.example.GreetingApp.DTO.LoginDTO;[m[41m[m
+ import com.example.GreetingApp.Utils.Jwt;[m
+ import com.example.GreetingApp.model.AuthUser;[m
+ import com.example.GreetingApp.repository.AuthRepository;[m
+[36m@@ -18,15 +19,13 @@[m [mimport java.util.UUID;[m
+ @RequiredArgsConstructor[m
+ public class AuthServices {[m
+ [m
+[31m-    @Autowired[m
+[32m+[m[41m[m
+     private final AuthRepository authRepository;[m
+[31m-    @Autowired[m
+[31m-    private final Jwt jwtutil;[m
+[31m-    @Autowired[m
+[32m+[m[41m[m
+     private final EmailService emailService;[m
+[31m-    @Autowired[m
+     private final PasswordEncoder passwordEncoder;[m
+ [m
+[32m+[m[32m    private final Jwt jwtUtil;[m[41m[m
+     public String registerUser(AuthDTO authDTO) {[m
+         if (authRepository.findByEmail(authDTO.getEmail()).isPresent()) {[m
+             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists");[m
+[36m@@ -59,4 +58,30 @@[m [mpublic class AuthServices {[m
+ [m
+         return "Account verified";[m
+     }[m
+[32m+[m[41m[m
+[32m+[m[32m    public String loginUser(LoginDTO loginDTO){[m[41m[m
+[32m+[m[32m        Optional<AuthUser> userOptional=authRepository.findByEmail(loginDTO.getEmail());[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        if (userOptional.isEmpty()){[m[41m[m
+[32m+[m[32m            throw  new ResponseStatusException(HttpStatus.UNAUTHORIZED,"Email not found");[m[41m[m
+[32m+[m[32m        }[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        AuthUser user =userOptional.get();[m[41m[m
+[32m+[m[32m        if (!passwordEncoder.matches(loginDTO.getPassword(),user.getPassword())){[m[41m[m
+[32m+[m[32m            throw  new ResponseStatusException(HttpStatus.UNAUTHORIZED,"Invalid password");[m[41m[m
+[32m+[m[32m        }[m[41m[m
+[32m+[m[32m        if (user.getVerificationToken()!=null){[m[41m[m
+[32m+[m[32m            throw  new ResponseStatusException(HttpStatus.UNAUTHORIZED,"Verify your account");[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        }[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        String token=jwtUtil.generateToken(user.getEmail());[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        if (!jwtUtil.validateToken(token)) {[m[41m[m
+[32m+[m[32m            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Token validation failed");[m[41m[m
+[32m+[m[32m        }[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m        return "Login Succsfull and token: "+token;[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m    }[m[41m[m
+ }[m
