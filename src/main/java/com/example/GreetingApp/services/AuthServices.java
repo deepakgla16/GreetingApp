@@ -109,4 +109,23 @@ public class AuthServices {
     }
 
 
+
+    public String resetPassword(String resetToken,String newPassword){
+        Optional<AuthUser> userOptional=authRepository.findByResetToken(resetToken);
+
+        if (userOptional.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid or expired token");
+        }
+
+        AuthUser user=userOptional.get();
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setResetToken(null);
+
+        authRepository.save(user);
+
+        return "password reset successfull";
+
+    }
+
 }

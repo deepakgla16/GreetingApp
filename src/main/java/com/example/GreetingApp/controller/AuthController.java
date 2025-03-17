@@ -3,6 +3,7 @@ package com.example.GreetingApp.controller;
 import com.example.GreetingApp.DTO.AuthDTO;
 import com.example.GreetingApp.DTO.LoginDTO;
 
+import com.example.GreetingApp.DTO.ResetPasswordDTO;
 import com.example.GreetingApp.services.AuthServices;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -64,6 +65,13 @@ public class AuthController {
         return ResponseEntity.ok(authServices.forgetPassword(authDTO.getEmail()));
     }
 
+
+
+
+    @PostMapping("reset-password")
+    public ResponseEntity<String> resetPassword(@RequestParam("token") String token, @RequestBody ResetPasswordDTO resetPasswordDTO){
+        return ResponseEntity.ok(authServices.resetPassword(token,resetPasswordDTO.getNewPassword()));
+    }
 
 
 }

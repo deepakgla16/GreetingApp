@@ -25,7 +25,7 @@ public class Jwt {
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 *60))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
