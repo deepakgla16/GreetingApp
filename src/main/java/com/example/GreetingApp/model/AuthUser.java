@@ -24,10 +24,11 @@ public class AuthUser {
     @Column(unique = true)
     private String verificationToken;
 
-    // Default constructor
+    @Column(unique = true)
+    private String resetToken;
+
     public AuthUser() {}
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -74,5 +75,13 @@ public class AuthUser {
 
     public void setVerificationToken(String verificationToken) {
         this.verificationToken = verificationToken;
+
+    }
+    public String getResetToken() {
+        return resetToken;
+    }
+
+    public void setResetToken(String resetToken) {
+        this.resetToken = resetToken;
     }
 }
